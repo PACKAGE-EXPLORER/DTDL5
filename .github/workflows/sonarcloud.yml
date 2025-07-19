@@ -26,7 +26,8 @@ jobs:
         with:
           args: >
             -Dsonar.projectKey=PACKAGE-EXPLORER_DTDL5
-            -Dsonar.organization=your_org_id
+            -Dsonar.organization=package-explorer  # or your actual org key
+
             -Dsonar.sources=.
             -Dsonar.exclusions=**/*.md,**/*.txt
         env:
