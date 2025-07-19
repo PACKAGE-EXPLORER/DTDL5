@@ -1,14 +1,13 @@
-name: SonarCloud Analysis
+name: SonarCloud Static Analysis
 
 on:
   push:
-    branches:
-      - master  # or main, depending on your default
+    branches: [ master ]
   pull_request:
     types: [opened, synchronize, reopened]
 
 jobs:
-  sonarcloud:
+  scan:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
 
@@ -16,22 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Java (required for scanner)
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: Install Node (if it's a JS/TS project)
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests and coverage (optional)
-        run: npm test -- --coverage || true
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
@@ -39,6 +27,7 @@ jobs:
           args: >
             -Dsonar.projectKey=PACKAGE-EXPLORER_DTDL5
             -Dsonar.organization=your_org_id
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.sources=.
+            -Dsonar.exclusions=**/*.md,**/*.txt
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
